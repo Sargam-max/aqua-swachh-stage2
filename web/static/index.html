@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aqua-Swachh · Smart Purifier Predictive Health Intelligence</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS & FontAwesome -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Chart.js for real-time telemetry -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            aqua: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+              950: '#082f49',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Premium Clean Canvas Background */
+    body {
+      background-color: #f8fafc;
+      background-image: 
+        radial-gradient(at 10% 0%, rgba(14, 165, 233, 0.08) 0px, transparent 50%),
+        radial-gradient(at 90% 0%, rgba(16, 185, 129, 0.06) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(224, 242, 254, 0.3) 0px, transparent 50%);
+      color: #0f172a;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Human-crafted elevation card */
+    .card-panel {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 1.25rem;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-panel:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 10px 25px -4px rgba(15, 23, 42, 0.06), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+    }
+
+    /* Tactile range sliders */
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 9999px;
+      background: #e2e8f0;
+      outline: none;
+      transition: background 0.2s;
+    }
+    input[type=range]:hover {
+      background: #cbd5e1;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #0284c7;
+      border: 3px solid #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35), 0 1px 2px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+    input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: #0369a1;
+    }
+    input[type=range]::-webkit-slider-thumb:active {
+      transform: scale(1.05);
+      background: #0c4a6e;
+    }
+
+    /* Fluid Pipe Animation */
+    @keyframes flowPulse {
+      from { stroke-dashoffset: 40; }
+      to { stroke-dashoffset: 0; }
+    }
+    .pipe-stream {
+      stroke-dasharray: 6 6;
+      animation: flowPulse 1.2s linear infinite;
+    }
+    .pipe-stream-slow {
+      stroke-dasharray: 6 6;
+      animation: flowPulse 2.8s linear infinite;
+    }
+    .pipe-stream-fast {
+      stroke-dasharray: 6 6;
+      animation: flowPulse 0.8s linear infinite;
+    }
+
+    /* Subdued Status Glows */
+    .glow-normal {
+      box-shadow: 0 0 0 1px #10b981, 0 8px 24px -4px rgba(16, 185, 129, 0.15);
+    }
+    .glow-monitor {
+      box-shadow: 0 0 0 1px #f59e0b, 0 8px 24px -4px rgba(245, 158, 11, 0.15);
+    }
+    .glow-service {
+      box-shadow: 0 0 0 1px #ef4444, 0 8px 24px -4px rgba(239, 68, 68, 0.15);
+    }
+
+    /* Tab active pill */
+    .tab-active {
+      background-color: #ffffff;
+      color: #0284c7;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+      font-weight: 600;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen selection:bg-sky-500 selection:text-white">
+
+  <!-- ======================================================== -->
+  <!-- TOP NAVIGATION BAR                                      -->
+  <!-- ======================================================== -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between">
+      
+      <!-- Brand & Project Meta -->
+      <div class="flex items-center space-x-3.5">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-cyan-500 flex items-center justify-center text-white shadow-sm ring-2 ring-sky-100">
+          <i class="fa-solid fa-droplet text-lg"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-extrabold text-lg tracking-tight text-slate-900">Aqua-Swachh</span>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 border border-sky-200">
+              Stage 2 Prototype
+            </span>
+          </div>
+          <p class="text-xs text-slate-500 font-medium">Predictive Purifier Health · atomQUEST Track 2 (RGIPT)</p>
+        </div>
+      </div>
+
+      <!-- Center Navigation Tabs -->
+      <nav class="hidden md:flex items-center p-1 bg-slate-100/90 rounded-xl border border-slate-200/80 text-xs">
+        <button onclick="switchTab('tab-live')" id="nav-tab-live" class="tab-btn px-4 py-2 rounded-lg transition-all flex items-center tab-active">
+          <i class="fa-solid fa-gauge mr-2"></i>Live Diagnostics
+        </button>
+        <button onclick="switchTab('tab-batch')" id="nav-tab-batch" class="tab-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center">
+          <i class="fa-solid fa-table-cells mr-2"></i>Batch Sensor Lab
+        </button>
+        <button onclick="switchTab('tab-hardware')" id="nav-tab-hardware" class="tab-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center">
+          <i class="fa-solid fa-microchip mr-2"></i>ESP32 Node & Pinout
+        </button>
+        <button onclick="switchTab('tab-protocol')" id="nav-tab-protocol" class="tab-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all flex items-center">
+          <i class="fa-solid fa-shield-check mr-2"></i>ML Methodology
+        </button>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center space-x-2.5">
+        <button id="streamToggleBtn" onclick="toggleLiveStream()" class="flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-all">
+          <i id="streamIcon" class="fa-solid fa-play text-[10px] text-sky-400"></i>
+          <span id="streamText">Simulate Telemetry</span>
+        </button>
+        <a href="/api/download-zip" class="hidden sm:flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-semibold shadow-2xs transition-all" title="Download Complete Project ZIP">
+          <i class="fa-solid fa-arrow-down-to-line text-slate-500"></i>
+          <span>ZIP</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Mobile Submenu -->
+  <div class="md:hidden bg-white border-b border-slate-200 px-4 py-2 flex justify-around text-xs font-medium">
+    <button onclick="switchTab('tab-live')" class="text-sky-600 font-bold py-1">Diagnostics</button>
+    <button onclick="switchTab('tab-batch')" class="text-slate-600 py-1">Batch Lab</button>
+    <button onclick="switchTab('tab-hardware')" class="text-slate-600 py-1">Hardware</button>
+    <button onclick="switchTab('tab-protocol')" class="text-slate-600 py-1">ML Protocol</button>
+  </div>
+
+  <!-- Main Viewport Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 flex-1 w-full">
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: LIVE DIAGNOSTICS & TELEMETRY                      -->
+    <!-- ======================================================== -->
+    <div id="tab-live" class="space-y-7">
+
+      <!-- Hero Purifier Diagnostic Banner -->
+      <div id="statusBannerCard" class="card-panel p-7 sm:p-9 glow-normal border-emerald-300 bg-gradient-to-br from-white via-emerald-50/20 to-sky-50/30">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+          
+          <!-- Left: Health Headline & Guidance -->
+          <div class="space-y-4 flex-1">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                Purifier Health Diagnostic
+              </span>
+              <span id="guardrailBadge" class="hidden px-2.5 py-0.5 text-xs font-bold rounded-full bg-rose-100 text-rose-800 border border-rose-300 animate-pulse">
+                <i class="fa-solid fa-shield-halved mr-1"></i> Deterministic Safety Guardrail Active
+              </span>
+            </div>
+
+            <div class="flex flex-wrap items-baseline gap-4">
+              <h1 id="statusText" class="text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-600">
+                NORMAL
+              </h1>
+              <div class="flex items-center space-x-2">
+                <span id="confidencePill" class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  Confidence: 100.0%
+                </span>
+                <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                  <i class="fa-solid fa-check text-emerald-600 mr-1"></i> Drinking Water Safe
+                </span>
+              </div>
+            </div>
+
+            <!-- Engineering Diagnosis Card -->
+            <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-2xs space-y-1.5 max-w-2xl">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                AI Assessment & Prescriptive Maintenance
+              </div>
+              <p id="actionRecommendation" class="text-slate-800 font-medium text-sm leading-relaxed">
+                Filter operating within nominal parameters. Water quality and flow are optimal.
+              </p>
+              <p id="technicalExplanation" class="text-sky-700 text-xs font-medium">
+                Salt rejection is high at 93.3% (benchmark >88%) with healthy permeate flow (1.95 L/min).
+              </p>
+            </div>
+          </div>
+
+          <!-- Right: Circular Health Gauge & Probabilities -->
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 min-w-[290px] sm:min-w-[320px] space-y-4 shadow-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div>
+                <span class="text-xs font-bold text-slate-700">Filter Health Index</span>
+                <p class="text-[11px] text-slate-400">Cartridge Service Margin</p>
+              </div>
+              <div class="text-right">
+                <span id="healthScoreText" class="text-2xl font-bold font-mono text-emerald-600">92%</span>
+                <span class="text-[11px] text-slate-400 block font-medium">~38 Days Left</span>
+              </div>
+            </div>
+
+            <!-- Class Probability Bars -->
+            <div class="space-y-2.5">
+              <div>
+                <div class="flex justify-between text-xs mb-1 font-medium">
+                  <span class="text-slate-700 flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>Normal</span>
+                  <span id="probNormal" class="font-mono text-emerald-700 font-semibold">100.0%</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div id="barNormal" class="bg-emerald-500 h-full transition-all duration-300" style="width: 100%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-1 font-medium">
+                  <span class="text-slate-700 flex items-center"><span class="w-2 h-2 rounded-full bg-amber-500 mr-2"></span>Monitor</span>
+                  <span id="probMonitor" class="font-mono text-amber-700 font-semibold">0.0%</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div id="barMonitor" class="bg-amber-500 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between text-xs mb-1 font-medium">
+                  <span class="text-slate-700 flex items-center"><span class="w-2 h-2 rounded-full bg-rose-500 mr-2"></span>Service Required</span>
+                  <span id="probService" class="font-mono text-rose-700 font-semibold">0.0%</span>
+                </div>
+                <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                  <div id="barService" class="bg-rose-500 h-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
+              <span>Cumulative Throughput:</span>
+              <strong class="text-slate-800 font-mono font-bold">1,845 L / 6,000 L</strong>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- PURIFIER PHYSICAL SCHEMATIC & FLUID FLOW CIRCUIT        -->
+      <!-- ======================================================== -->
+      <div class="card-panel p-6 sm:p-7 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-sky-600 bg-sky-50 px-2 py-0.5 rounded border border-sky-100">
+                Purifier Architecture
+              </span>
+              <span class="text-xs text-slate-400">·</span>
+              <span class="text-xs text-slate-500 font-medium">Continuous Multi-Stage Membrane Diagnostics</span>
+            </div>
+            <h2 class="text-base font-bold text-slate-900 mt-1">Water Journey & Embedded IoT Sensing Array</h2>
+          </div>
+
+          <!-- Feed Water Source Selector -->
+          <div class="flex items-center space-x-2 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+            <span class="text-slate-500 pl-1.5 font-medium">Water Supply:</span>
+            <select id="waterSourceSelect" onchange="onWaterSourceChange()" class="bg-white text-slate-800 border border-slate-300 rounded-lg px-2.5 py-1 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-sky-500">
+              <option value="municipal">Municipal Tap (350 - 450 ppm)</option>
+              <option value="hardwater">Ground / Borewell (750 - 950 ppm)</option>
+              <option value="tanker">Water Tanker Supply (500 - 650 ppm)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Purifier Flow Schematic Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3.5 pt-1">
+          
+          <!-- Stage 1: Raw Feed & TDS-1 -->
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 flex flex-col justify-between space-y-3 relative overflow-hidden">
+            <div class="flex items-center justify-between text-xs text-slate-600 font-semibold">
+              <span>1. Raw Water Inlet</span>
+              <div class="w-6 h-6 rounded bg-sky-100 text-sky-700 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-faucet-drip"></i>
+              </div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold font-mono text-sky-700" id="flowFeedTds">420 <span class="text-xs text-slate-400 font-normal">ppm</span></div>
+              <div class="text-[11px] text-slate-500 font-medium mt-0.5">Xcluma TDS-1 Sensor</div>
+            </div>
+            <div class="text-[10px] text-slate-600 bg-white px-2 py-1 rounded border border-slate-200 font-mono text-center">
+              GPIO 1 (ADC1)
+            </div>
+          </div>
+
+          <!-- Stage 2: Sediment & Carbon Pre-Filters -->
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 flex flex-col justify-between space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-600 font-semibold">
+              <span>2. Pre-Treatment</span>
+              <div class="w-6 h-6 rounded bg-indigo-100 text-indigo-700 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-filter"></i>
+              </div>
+            </div>
+            <div>
+              <div class="text-base font-bold text-slate-800">Sediment + Carbon</div>
+              <div class="text-[11px] text-slate-500 font-medium mt-0.5">Particulate Filtration: <strong class="text-emerald-600">&lt;1 NTU</strong></div>
+            </div>
+            <div class="text-[10px] text-slate-600 bg-white px-2 py-1 rounded border border-slate-200 text-center font-medium">
+              5-Micron Spun Yarn
+            </div>
+          </div>
+
+          <!-- Stage 3: RO Membrane Separation Core -->
+          <div class="p-4 rounded-xl bg-sky-50/60 border-2 border-sky-300 flex flex-col justify-between space-y-3 ring-2 ring-sky-100 relative">
+            <div class="flex items-center justify-between text-xs text-sky-800 font-bold">
+              <span>3. RO Membrane Core</span>
+              <div class="w-6 h-6 rounded bg-sky-200 text-sky-800 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-atom"></i>
+              </div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold font-mono text-emerald-600" id="flowRejectionPct">93.3%</div>
+              <div class="text-[11px] text-slate-600 font-semibold mt-0.5">Salt Rejection (η)</div>
+            </div>
+            <div class="text-[10px] text-sky-800 bg-white px-2 py-1 rounded border border-sky-200 font-bold text-center">
+              75 GPD Thin-Film
+            </div>
+          </div>
+
+          <!-- Stage 4: Permeate Output & TDS-2 -->
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 flex flex-col justify-between space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-600 font-semibold">
+              <span>4. Purified Permeate</span>
+              <div class="w-6 h-6 rounded bg-teal-100 text-teal-700 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-glass-water"></i>
+              </div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold font-mono text-teal-700" id="flowPermeateTds">28 <span class="text-xs text-slate-400 font-normal">ppm</span></div>
+              <div class="text-[11px] text-slate-500 font-medium mt-0.5">Xcluma TDS-2 Sensor</div>
+            </div>
+            <div class="text-[10px] text-slate-600 bg-white px-2 py-1 rounded border border-slate-200 font-mono text-center">
+              GPIO 2 (ADC1)
+            </div>
+          </div>
+
+          <!-- Stage 5: Flow Meter & Dispense -->
+          <div class="p-4 rounded-xl bg-slate-50/70 border border-slate-200 flex flex-col justify-between space-y-3">
+            <div class="flex items-center justify-between text-xs text-slate-600 font-semibold">
+              <span>5. Permeate Flow</span>
+              <div class="w-6 h-6 rounded bg-amber-100 text-amber-700 flex items-center justify-center text-xs">
+                <i class="fa-solid fa-gauge-high"></i>
+              </div>
+            </div>
+            <div>
+              <div class="text-2xl font-bold font-mono text-amber-700" id="flowRateDispense">1.95 <span class="text-xs text-slate-400 font-normal">L/m</span></div>
+              <div class="text-[11px] text-slate-500 font-medium mt-0.5">YF-S201 Hall Turbine</div>
+            </div>
+            <div class="text-[10px] text-slate-600 bg-white px-2 py-1 rounded border border-slate-200 font-mono text-center">
+              GPIO 5 Pulse ISR
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- 4 KEY TELEMETRY KPI METRICS                             -->
+      <!-- ======================================================== -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- Salt Rejection -->
+        <div class="card-panel p-5 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+            <span>Salt Rejection (η)</span>
+            <i class="fa-solid fa-filter text-sky-500"></i>
+          </div>
+          <div class="my-3">
+            <div id="rejectionVal" class="text-3xl font-bold font-mono text-sky-700">93.3%</div>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center mt-1">
+              <i class="fa-solid fa-circle-check mr-1 text-[10px]"></i> Optimal (&gt;88%)
+            </span>
+          </div>
+          <div class="text-xs text-slate-500 pt-2 border-t border-slate-100 flex justify-between">
+            <span>Temp-Normalized:</span>
+            <strong id="tempCompRejectionVal" class="text-slate-800 font-mono">93.3%</strong>
+          </div>
+        </div>
+
+        <!-- Permeate TDS -->
+        <div class="card-panel p-5 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+            <span>Permeate TDS (Out)</span>
+            <i class="fa-solid fa-glass-water-droplet text-teal-500"></i>
+          </div>
+          <div class="my-3">
+            <div id="tdsOutVal" class="text-3xl font-bold font-mono text-slate-900">28.0 <span class="text-xs text-slate-400 font-normal">ppm</span></div>
+            <span class="text-xs text-slate-500 mt-1 block">Feed TDS: <strong id="tdsInVal" class="text-slate-800 font-mono">420.0</strong> ppm</span>
+          </div>
+          <div class="text-xs text-slate-500 pt-2 border-t border-slate-100 flex justify-between">
+            <span>Delta TDS:</span>
+            <strong id="deltaTdsVal" class="text-slate-800 font-mono">392.0 ppm</strong>
+          </div>
+        </div>
+
+        <!-- Permeate Flow -->
+        <div class="card-panel p-5 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+            <span>Permeate Flow (Q)</span>
+            <i class="fa-solid fa-water text-amber-500"></i>
+          </div>
+          <div class="my-3">
+            <div id="flowRateVal" class="text-3xl font-bold font-mono text-slate-900">1.95 <span class="text-xs text-slate-400 font-normal">L/m</span></div>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center mt-1">
+              <i class="fa-solid fa-check mr-1 text-[10px]"></i> Nominal Flow
+            </span>
+          </div>
+          <div class="text-xs text-slate-500 pt-2 border-t border-slate-100 flex justify-between">
+            <span>Flow-Rejection Index:</span>
+            <strong id="flowIndexVal" class="text-slate-800 font-mono">1.82</strong>
+          </div>
+        </div>
+
+        <!-- Water Temperature -->
+        <div class="card-panel p-5 flex flex-col justify-between">
+          <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+            <span>Water Temperature</span>
+            <i class="fa-solid fa-temperature-half text-rose-500"></i>
+          </div>
+          <div class="my-3">
+            <div id="temperatureVal" class="text-3xl font-bold font-mono text-slate-900">25.5 <span class="text-xs text-slate-400 font-normal">°C</span></div>
+            <span class="text-xs text-slate-500 mt-1 block">DS18B20 1-Wire Probe</span>
+          </div>
+          <div class="text-xs text-slate-500 pt-2 border-t border-slate-100 flex justify-between">
+            <span>Calibration Ref:</span>
+            <strong class="text-slate-800 font-mono">25.0°C</strong>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- INTERACTIVE TESTING: BENCH SCENARIOS & SLIDERS           -->
+      <!-- ======================================================== -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- 1-Click Bench Test Scenarios -->
+        <div class="card-panel p-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+              <i class="fa-solid fa-flask-vial text-sky-600 mr-2"></i>Physical Test Presets
+            </h3>
+            <span class="text-[10px] text-slate-400 font-semibold">1-Click Apply</span>
+          </div>
+
+          <div class="space-y-2">
+            <!-- Preset 1 -->
+            <button onclick="applyScenario(420, 28, 25.5, 1.95, 'Fresh RO Membrane')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-sky-50/60 border border-slate-200 transition-all flex items-center justify-between group">
+              <div>
+                <div class="text-xs font-bold text-slate-900 group-hover:text-sky-700">1. Fresh RO Membrane</div>
+                <div class="text-[11px] text-slate-500">Standard tap, &gt;93% salt rejection</div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">Normal</span>
+            </button>
+
+            <!-- Preset 2 -->
+            <button onclick="applyScenario(780, 48, 27.0, 1.80, 'High-Hardness Tap Water')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-sky-50/60 border border-slate-200 transition-all flex items-center justify-between group">
+              <div>
+                <div class="text-xs font-bold text-slate-900 group-hover:text-sky-700">2. Hard Water Challenge</div>
+                <div class="text-[11px] text-slate-500">Feed 780 ppm, pure permeate</div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-200">Normal</span>
+            </button>
+
+            <!-- Preset 3 -->
+            <button onclick="applyScenario(510, 115, 26.8, 1.25, 'Early Membrane Scaling')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-amber-50/60 border border-slate-200 transition-all flex items-center justify-between group">
+              <div>
+                <div class="text-xs font-bold text-slate-900 group-hover:text-amber-700">3. Moderate Scaling / Age</div>
+                <div class="text-[11px] text-slate-500">Rejection slips to ~77.5%</div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">Monitor</span>
+            </button>
+
+            <!-- Preset 4 -->
+            <button onclick="applyScenario(480, 120, 26.0, 0.65, 'Sediment / Carbon Clogging')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-rose-50/60 border border-slate-200 transition-all flex items-center justify-between group">
+              <div>
+                <div class="text-xs font-bold text-slate-900 group-hover:text-rose-700">4. Particulate Clogging</div>
+                <div class="text-[11px] text-slate-500">Pre-filters choked; flow 0.65 L/m</div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200">Service</span>
+            </button>
+
+            <!-- Preset 5 -->
+            <button onclick="applyScenario(550, 230, 28.2, 1.40, 'Membrane Pore Breakthrough')" class="w-full text-left p-3 rounded-xl bg-slate-50 hover:bg-rose-50/60 border border-slate-200 transition-all flex items-center justify-between group">
+              <div>
+                <div class="text-xs font-bold text-slate-900 group-hover:text-rose-700">5. Membrane Rupture</div>
+                <div class="text-[11px] text-slate-500">TDS Out jumps to 230 ppm</div>
+              </div>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200">Service</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tactile Range Sliders Sandbox -->
+        <div class="lg:col-span-2 card-panel p-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+              <i class="fa-solid fa-sliders text-sky-600 mr-2"></i>Interactive Sensor Telemetry Sandbox
+            </h3>
+            <button onclick="resetToDefaults()" class="text-xs font-semibold text-sky-600 hover:text-sky-700 flex items-center">
+              <i class="fa-solid fa-arrow-rotate-left mr-1.5 text-[10px]"></i>Reset Nominal
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Feed TDS (In) -->
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-700 font-semibold">Feed TDS (in):</span>
+                <div class="flex items-center space-x-1">
+                  <input type="number" id="numTdsIn" min="50" max="1500" value="420" onchange="onNumInputChange('sliderTdsIn', this.value)" class="w-16 bg-white text-sky-700 font-mono font-bold text-xs p-1 rounded border border-slate-300 text-right">
+                  <span class="text-xs text-slate-500">ppm</span>
+                </div>
+              </div>
+              <input type="range" id="sliderTdsIn" min="100" max="1200" step="10" value="420" oninput="onSliderChangeSync('numTdsIn', this.value)">
+              <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                <span>100 ppm</span>
+                <span>Tap water range (300-800)</span>
+                <span>1200 ppm</span>
+              </div>
+            </div>
+
+            <!-- Permeate TDS (Out) -->
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-700 font-semibold">Permeate TDS (out):</span>
+                <div class="flex items-center space-x-1">
+                  <input type="number" id="numTdsOut" min="5" max="500" value="28" onchange="onNumInputChange('sliderTdsOut', this.value)" class="w-16 bg-white text-teal-700 font-mono font-bold text-xs p-1 rounded border border-slate-300 text-right">
+                  <span class="text-xs text-slate-500">ppm</span>
+                </div>
+              </div>
+              <input type="range" id="sliderTdsOut" min="10" max="350" step="5" value="28" oninput="onSliderChangeSync('numTdsOut', this.value)">
+              <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                <span>10 ppm</span>
+                <span>Drinkable Limit (&lt;150)</span>
+                <span>350 ppm</span>
+              </div>
+            </div>
+
+            <!-- Permeate Flow -->
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-700 font-semibold">Permeate Flow (Q):</span>
+                <div class="flex items-center space-x-1">
+                  <input type="number" id="numFlow" min="0.1" max="4.0" step="0.05" value="1.95" onchange="onNumInputChange('sliderFlow', this.value)" class="w-16 bg-white text-amber-700 font-mono font-bold text-xs p-1 rounded border border-slate-300 text-right">
+                  <span class="text-xs text-slate-500">L/m</span>
+                </div>
+              </div>
+              <input type="range" id="sliderFlow" min="0.2" max="3.0" step="0.05" value="1.95" oninput="onSliderChangeSync('numFlow', this.value)">
+              <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                <span>0.2 L/min (Choked)</span>
+                <span>Nominal (1.5 - 2.2)</span>
+                <span>3.0 L/min</span>
+              </div>
+            </div>
+
+            <!-- Temperature -->
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+              <div class="flex justify-between items-center text-xs">
+                <span class="text-slate-700 font-semibold">Water Temperature:</span>
+                <div class="flex items-center space-x-1">
+                  <input type="number" id="numTemp" min="5" max="50" step="0.5" value="25.5" onchange="onNumInputChange('sliderTemp', this.value)" class="w-16 bg-white text-rose-700 font-mono font-bold text-xs p-1 rounded border border-slate-300 text-right">
+                  <span class="text-xs text-slate-500">°C</span>
+                </div>
+              </div>
+              <input type="range" id="sliderTemp" min="10" max="45" step="0.5" value="25.5" oninput="onSliderChangeSync('numTemp', this.value)">
+              <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                <span>10°C (Winter)</span>
+                <span>Standard (25°C)</span>
+                <span>45°C (Summer)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ======================================================== -->
+      <!-- REAL-TIME TELEMETRY CHARTS                               -->
+      <!-- ======================================================== -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <div class="card-panel p-6 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+              <i class="fa-solid fa-chart-line text-sky-600 mr-2"></i>TDS Telemetry (Feed vs Permeate)
+            </h3>
+            <span class="text-xs font-mono text-slate-400">ppm vs Time</span>
+          </div>
+          <div class="h-60">
+            <canvas id="tdsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="card-panel p-6 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+              <i class="fa-solid fa-chart-area text-emerald-600 mr-2"></i>Salt Rejection & Flow Telemetry
+            </h3>
+            <span class="text-xs font-mono text-slate-400">η% & L/min</span>
+          </div>
+          <div class="h-60">
+            <canvas id="rejectionChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: BATCH SENSOR LAB (REAL DATA INSPECTION)          -->
+    <!-- ======================================================== -->
+    <div id="tab-batch" class="hidden space-y-6">
+      
+      <div class="card-panel p-7 sm:p-9 space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900 flex items-center">
+              <i class="fa-solid fa-file-csv text-sky-600 mr-3"></i>Real-World Sensor Data Inspector
+            </h2>
+            <p class="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">
+              Upload raw CSV sensor logs recorded by your ESP32 SD card, serial logger, or bench rig. 
+              The system calculates physics indicators row-by-row and runs Random Forest classification with safety overrides.
+            </p>
+          </div>
+
+          <!-- Instant 1-Click Test Button -->
+          <button onclick="loadSampleDatasetDirectly()" class="px-4 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold shadow-sm transition-all flex items-center whitespace-nowrap">
+            <i class="fa-solid fa-bolt mr-2"></i>Analyze Bundled Stage 2 Dataset (1,000 Rows)
+          </button>
+        </div>
+
+        <!-- Drag & Drop Zone -->
+        <div id="dropZone" onclick="document.getElementById('csvFileInput').click()" class="border-2 border-dashed border-sky-300 hover:border-sky-500 bg-sky-50/30 rounded-2xl p-8 text-center cursor-pointer transition-all space-y-3 group">
+          <input type="file" id="csvFileInput" accept=".csv" onchange="handleCsvFileSelected(event)" class="hidden">
+          <div class="w-12 h-12 rounded-xl bg-white text-sky-600 flex items-center justify-center mx-auto text-xl shadow-xs group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+          </div>
+          <div>
+            <div class="text-sm font-bold text-slate-800 group-hover:text-sky-700">
+              Drag & Drop your Sensor CSV here or Click to Browse
+            </div>
+            <div class="text-xs text-slate-400 mt-1">
+              Required headers: <code class="text-sky-700 bg-sky-100/70 px-1 py-0.5 rounded font-mono text-[11px]">tds_in, tds_out, temperature, flow_rate</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+          <span>Need the reference CSV file?</span>
+          <a href="/api/download-sample-csv" class="text-sky-600 hover:underline font-semibold flex items-center">
+            <i class="fa-solid fa-download mr-1.5 text-xs"></i>Download sensor_data.csv
+          </a>
+        </div>
+      </div>
+
+      <!-- Batch Analysis Results Section -->
+      <div id="uploadResultsSection" class="hidden space-y-6">
+        
+        <!-- Summary KPI Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="card-panel p-5">
+            <div class="text-xs text-slate-500 font-medium">Total Evaluated Records</div>
+            <div id="resTotalRecords" class="text-3xl font-bold font-mono text-slate-900 mt-1">0</div>
+            <div id="resFilename" class="text-[11px] text-slate-400 truncate mt-1">file.csv</div>
+          </div>
+          <div class="card-panel p-5 border-emerald-300 bg-emerald-50/40">
+            <div class="text-xs text-emerald-800 font-bold">Normal Condition</div>
+            <div id="resNormalCount" class="text-3xl font-bold font-mono text-emerald-600 mt-1">0%</div>
+            <div id="resNormalSub" class="text-[11px] text-emerald-700 mt-1 font-medium">0 records</div>
+          </div>
+          <div class="card-panel p-5 border-amber-300 bg-amber-50/40">
+            <div class="text-xs text-amber-800 font-bold">Monitor State</div>
+            <div id="resMonitorCount" class="text-3xl font-bold font-mono text-amber-600 mt-1">0%</div>
+            <div id="resMonitorSub" class="text-[11px] text-amber-700 mt-1 font-medium">0 records</div>
+          </div>
+          <div class="card-panel p-5 border-rose-300 bg-rose-50/40">
+            <div class="text-xs text-rose-800 font-bold">Service Required</div>
+            <div id="resServiceCount" class="text-3xl font-bold font-mono text-rose-600 mt-1">0%</div>
+            <div id="resServiceSub" class="text-[11px] text-rose-700 mt-1 font-medium">0 records</div>
+          </div>
+        </div>
+
+        <!-- Filtered Table Preview -->
+        <div class="card-panel p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center">
+                <i class="fa-solid fa-table-list text-sky-600 mr-2"></i>Evaluated Records Preview
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">Showing initial 50 rows processed by Random Forest model</p>
+            </div>
+
+            <!-- Table Category Filter -->
+            <div class="flex items-center space-x-1 text-xs">
+              <button onclick="filterTable('all')" id="flt-all" class="px-2.5 py-1 rounded bg-slate-900 text-white font-semibold">All</button>
+              <button onclick="filterTable('Normal')" id="flt-normal" class="px-2.5 py-1 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 font-semibold">Normal</button>
+              <button onclick="filterTable('Monitor')" id="flt-monitor" class="px-2.5 py-1 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 font-semibold">Monitor</button>
+              <button onclick="filterTable('Service Required')" id="flt-service" class="px-2.5 py-1 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 font-semibold">Service</button>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto max-h-96 rounded-xl border border-slate-200">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-50 text-slate-600 uppercase text-[10px] sticky top-0 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="py-2.5 px-3">#</th>
+                  <th class="py-2.5 px-3">Timestamp</th>
+                  <th class="py-2.5 px-3">Feed TDS</th>
+                  <th class="py-2.5 px-3">Permeate TDS</th>
+                  <th class="py-2.5 px-3">Salt Rejection (η)</th>
+                  <th class="py-2.5 px-3">Flow Rate</th>
+                  <th class="py-2.5 px-3">Temp</th>
+                  <th class="py-2.5 px-3">Predicted Status</th>
+                  <th class="py-2.5 px-3">Confidence</th>
+                </tr>
+              </thead>
+              <tbody id="csvResultsTableBody" class="divide-y divide-slate-100 font-mono bg-white">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: ESP32 HARDWARE & PINOUT SPECIFICATIONS            -->
+    <!-- ======================================================== -->
+    <div id="tab-hardware" class="hidden space-y-6">
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Sensor Node Pinout -->
+        <div class="card-panel p-6 sm:p-7 space-y-4">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center border-b border-slate-100 pb-3">
+            <i class="fa-solid fa-microchip text-sky-600 mr-2.5"></i>ESP32-S3 Physical Sensor Pinout
+          </h2>
+          <div class="space-y-2.5 text-xs">
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <strong class="text-slate-900 block font-semibold">Feed TDS Sensor (TDS-1)</strong>
+                <span class="text-slate-500">Xcluma TDS Meter V1.0 · Analog Conditioning</span>
+              </div>
+              <span class="font-mono text-sky-700 font-bold bg-white px-2.5 py-1 rounded border border-slate-200">GPIO 1 (ADC1)</span>
+            </div>
+
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <strong class="text-slate-900 block font-semibold">Permeate TDS Sensor (TDS-2)</strong>
+                <span class="text-slate-500">Xcluma TDS Meter V1.0 · Calibrated for Permeate</span>
+              </div>
+              <span class="font-mono text-teal-700 font-bold bg-white px-2.5 py-1 rounded border border-slate-200">GPIO 2 (ADC1)</span>
+            </div>
+
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <strong class="text-slate-900 block font-semibold">Temperature Sensor</strong>
+                <span class="text-slate-500">DS18B20 1-Wire Digital Probe (4.7kΩ pullup)</span>
+              </div>
+              <span class="font-mono text-rose-700 font-bold bg-white px-2.5 py-1 rounded border border-slate-200">GPIO 4 (1-Wire)</span>
+            </div>
+
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between">
+              <div>
+                <strong class="text-slate-900 block font-semibold">Permeate Flow Meter</strong>
+                <span class="text-slate-500">YF-S201 1/2" Hall-Effect Sensor (7.5 Hz per L/min)</span>
+              </div>
+              <span class="font-mono text-amber-700 font-bold bg-white px-2.5 py-1 rounded border border-slate-200">GPIO 5 (Pulse ISR)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Signal Processing & Edge Firmware -->
+        <div class="card-panel p-6 sm:p-7 space-y-4">
+          <h2 class="text-sm font-bold uppercase tracking-wider text-slate-800 flex items-center border-b border-slate-100 pb-3">
+            <i class="fa-solid fa-code text-indigo-600 mr-2.5"></i>Firmware Telemetry & Pipeline
+          </h2>
+          <div class="space-y-3 text-xs leading-relaxed text-slate-600">
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+              <strong class="text-slate-800 font-semibold block">ADC Signal Conditioning & Filtering:</strong>
+              <p class="text-slate-500 text-[11px]">
+                The firmware takes 30 successive analog readings on ADC1, discards highest/lowest outliers, and applies an Exponential Moving Average (EMA, $\alpha=0.25$) to eliminate switching power supply ripple.
+              </p>
+            </div>
+
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+              <strong class="text-slate-800 font-semibold block">Interrupt-Driven Flow Metering:</strong>
+              <p class="text-slate-500 text-[11px]">
+                The YF-S201 turbine triggers hardware ISR on GPIO 5 falling edges. Every 1,000 ms, frequency is converted via the turbine characteristic: <code class="font-mono bg-white px-1 border rounded">Q = pulses / 7.5</code> L/min.
+              </p>
+            </div>
+
+            <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+              <strong class="text-slate-800 font-semibold block">Serial Bridge Logging:</strong>
+              <p class="text-slate-500 text-[11px]">
+                Transmits 4-tuple CSV packets over USB UART at 115200 baud directly to <code class="font-mono bg-white px-1 border rounded">data/data_logging_esp32.py</code> for local CSV persistence and real-time inference.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 4: ML METHODOLOGY & SCIENTIFIC GROUNDING             -->
+    <!-- ======================================================== -->
+    <div id="tab-protocol" class="hidden space-y-6">
+      
+      <div class="card-panel p-7 sm:p-9 space-y-5">
+        <div class="border-b border-slate-100 pb-4">
+          <h2 class="text-xl font-bold text-slate-900 flex items-center">
+            <i class="fa-solid fa-shield-check text-sky-600 mr-3"></i>Stage 2 ML Engineering & Ground-Truth Protocol
+          </h2>
+          <p class="text-xs text-slate-500 mt-1 max-w-3xl leading-relaxed">
+            Essential guidelines addressing reviewer expectations for Stage 2 of atomQUEST: distinguishing a validated prototype classifier from ungrounded drinking water potability or RUL days.
+          </p>
+        </div>
+
+        <div class="space-y-4 text-xs">
+          
+          <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <h3 class="text-slate-900 font-bold text-sm flex items-center">
+              <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mr-2 text-xs font-bold">1</span>
+              Where do real ground-truth labels come from?
+            </h3>
+            <p class="text-slate-600 leading-relaxed">
+              True labels must be anchored to <strong>independently known physical cartridge states</strong>, not circular rules based on raw TDS readings:
+            </p>
+            <ul class="list-disc list-inside text-slate-600 space-y-1 pl-2">
+              <li><strong class="text-emerald-700 font-semibold">Normal</strong>: Logged from freshly flushed, certified RO cartridges operating under standard municipal water conditions.</li>
+              <li><strong class="text-amber-700 font-semibold">Monitor</strong>: Logged from cartridges tested after processing 50% to 75% of rated cumulative throughput ($\Sigma Q \approx 3,000 - 4,500\text{ Liters}$).</li>
+              <li><strong class="text-rose-700 font-semibold">Service Required</strong>: Logged from cartridges near their service limit, or cartridges subjected to controlled accelerated bench fouling (high particulate loading or scaling).</li>
+            </ul>
+          </div>
+
+          <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <h3 class="text-slate-900 font-bold text-sm flex items-center">
+              <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mr-2 text-xs font-bold">2</span>
+              Why classification instead of predicting remaining useful life days?
+            </h3>
+            <p class="text-slate-600 leading-relaxed">
+              Predicting remaining filter days without multi-month longitudinal field data across varying seasonal water sources is scientifically ungrounded. For Stage 2, predicting condition state (<strong class="text-emerald-700">Normal</strong>, <strong class="text-amber-700">Monitor</strong>, <strong class="text-rose-700">Service Required</strong>) proves the IoT pipeline and feature engineering work with transparency and scientific integrity.
+            </p>
+          </div>
+
+          <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+            <h3 class="text-slate-900 font-bold text-sm flex items-center">
+              <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center mr-2 text-xs font-bold">3</span>
+              Physics Feature Engineering & Mathematical Formulation
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+              <div class="p-3 bg-white rounded-lg border border-slate-200 space-y-1">
+                <span class="text-slate-800 font-bold block">Salt Rejection (η):</span>
+                <code class="font-mono text-sky-700 text-xs block">η = 1 - (TDS_out / TDS_in)</code>
+                <p class="text-[11px] text-slate-500">Measures solute rejection across polyamide membrane independent of feed fluctuations.</p>
+              </div>
+
+              <div class="p-3 bg-white rounded-lg border border-slate-200 space-y-1">
+                <span class="text-slate-800 font-bold block">Temperature Compensation:</span>
+                <code class="font-mono text-teal-700 text-xs block">TDS_norm = TDS / (1 + 0.02*(T-25))</code>
+                <p class="text-[11px] text-slate-500">Corrects electrical conductivity drift (~2% per °C) across summer and winter.</p>
+              </div>
+
+              <div class="p-3 bg-white rounded-lg border border-slate-200 space-y-1">
+                <span class="text-slate-800 font-bold block">Flow-Rejection Indicator:</span>
+                <code class="font-mono text-amber-700 text-xs block">Index = Flow * max(η, 0)</code>
+                <p class="text-[11px] text-slate-500">Isolates particulate head-loss (flow drop) from membrane rupture (rejection drop).</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Clean Minimal Footer -->
+  <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500 font-medium">
+    Aqua-Swachh: Smart Water Purifier Predictive Health Monitoring · atomQUEST Track 2 · Rajiv Gandhi Institute of Petroleum Technology
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT APPLICATION LOGIC                             -->
+  <!-- ======================================================== -->
+  <script>
+    let isStreaming = false;
+    let streamInterval = null;
+    let tdsChart, rejectionChart;
+    const maxDataPoints = 15;
+    let cachedUploadedRows = [];
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      document.querySelectorAll('#tab-live, #tab-batch, #tab-hardware, #tab-protocol').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('tab-active');
+        btn.classList.add('text-slate-600');
+      });
+
+      const activeBtn = document.getElementById('nav-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('tab-active');
+        activeBtn.classList.remove('text-slate-600');
+      }
+    }
+
+    // Chart.js Telemetry Initializer
+    function initCharts() {
+      const ctxTDS = document.getElementById('tdsChart').getContext('2d');
+      tdsChart = new Chart(ctxTDS, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Feed TDS (in)',
+              borderColor: '#0284c7',
+              backgroundColor: 'rgba(2, 132, 199, 0.06)',
+              data: [],
+              tension: 0.35,
+              fill: true,
+              borderWidth: 2
+            },
+            {
+              label: 'Permeate TDS (out)',
+              borderColor: '#0d9488',
+              backgroundColor: 'rgba(13, 148, 136, 0.06)',
+              data: [],
+              tension: 0.35,
+              fill: true,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 } } },
+            y: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 } } }
+          },
+          plugins: { 
+            legend: { labels: { color: '#334155', font: { family: 'Inter', weight: '600', size: 11 } } } 
+          }
+        }
+      });
+
+      const ctxRejection = document.getElementById('rejectionChart').getContext('2d');
+      rejectionChart = new Chart(ctxRejection, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Salt Rejection η (%)',
+              borderColor: '#059669',
+              backgroundColor: 'rgba(5, 150, 105, 0.06)',
+              data: [],
+              tension: 0.35,
+              borderWidth: 2,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Permeate Flow (L/min)',
+              borderColor: '#d97706',
+              borderDash: [4, 4],
+              data: [],
+              tension: 0.35,
+              borderWidth: 2,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 } } },
+            y: {
+              type: 'linear',
+              position: 'left',
+              grid: { color: '#f1f5f9' },
+              ticks: { color: '#059669', font: { family: 'JetBrains Mono', size: 10 } },
+              min: 0,
+              max: 100
+            },
+            y1: {
+              type: 'linear',
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: { color: '#d97706', font: { family: 'JetBrains Mono', size: 10 } },
+              min: 0,
+              max: 3
+            }
+          },
+          plugins: { 
+            legend: { labels: { color: '#334155', font: { family: 'Inter', weight: '600', size: 11 } } } 
+          }
+        }
+      });
+    }
+
+    function addChartData(tdsIn, tdsOut, rejection, flow) {
+      const nowLabel = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      
+      if (tdsChart.data.labels.length >= maxDataPoints) {
+        tdsChart.data.labels.shift();
+        tdsChart.data.datasets[0].data.shift();
+        tdsChart.data.datasets[1].data.shift();
+      }
+      tdsChart.data.labels.push(nowLabel);
+      tdsChart.data.datasets[0].data.push(tdsIn);
+      tdsChart.data.datasets[1].data.push(tdsOut);
+      tdsChart.update();
+
+      if (rejectionChart.data.labels.length >= maxDataPoints) {
+        rejectionChart.data.labels.shift();
+        rejectionChart.data.datasets[0].data.shift();
+        rejectionChart.data.datasets[1].data.shift();
+      }
+      rejectionChart.data.labels.push(nowLabel);
+      rejectionChart.data.datasets[0].data.push(rejection);
+      rejectionChart.data.datasets[1].data.push(flow);
+      rejectionChart.update();
+    }
+
+    // Single-Sample Predict API Call
+    async function requestPrediction(tdsIn, tdsOut, temp, flow) {
+      try {
+        const resp = await fetch('/api/predict', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            tds_in: parseFloat(tdsIn),
+            tds_out: parseFloat(tdsOut),
+            temperature: parseFloat(temp),
+            flow_rate: parseFloat(flow)
+          })
+        });
+        if (!resp.ok) throw new Error('Prediction API failed');
+        const data = await resp.json();
+        updateUI(data, tdsIn, tdsOut, temp, flow);
+        addChartData(tdsIn, tdsOut, data.physics_indicators.salt_rejection_pct, flow);
+      } catch (err) {
+        console.error("Prediction error:", err);
+      }
+    }
+
+    // Update UI Elements with Prediction Results
+    function updateUI(res, tdsIn, tdsOut, temp, flow) {
+      const status = res.predicted_status;
+      const statusText = document.getElementById('statusText');
+      const banner = document.getElementById('statusBannerCard');
+      const confidencePill = document.getElementById('confidencePill');
+      const actionRec = document.getElementById('actionRecommendation');
+      const techExpl = document.getElementById('technicalExplanation');
+      const guardrailBadge = document.getElementById('guardrailBadge');
+      const healthScoreText = document.getElementById('healthScoreText');
+
+      statusText.innerText = status.toUpperCase();
+      actionRec.innerText = res.action_recommendation;
+      if (res.explanation) techExpl.innerText = res.explanation;
+      confidencePill.innerText = `Confidence: ${(res.confidence * 100).toFixed(1)}%`;
+
+      // Visual color-coding by status
+      banner.className = 'card-panel p-7 sm:p-9 ';
+      if (status === 'Normal') {
+        banner.className += 'glow-normal border-emerald-300 bg-gradient-to-br from-white via-emerald-50/20 to-sky-50/30';
+        statusText.className = 'text-4xl sm:text-5xl font-extrabold tracking-tight text-emerald-600';
+        confidencePill.className = 'text-xs font-bold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200';
+        healthScoreText.className = 'text-2xl font-bold font-mono text-emerald-600';
+        healthScoreText.innerText = '92%';
+      } else if (status === 'Monitor') {
+        banner.className += 'glow-monitor border-amber-300 bg-gradient-to-br from-white via-amber-50/20 to-yellow-50/30';
+        statusText.className = 'text-4xl sm:text-5xl font-extrabold tracking-tight text-amber-600';
+        confidencePill.className = 'text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-200';
+        healthScoreText.className = 'text-2xl font-bold font-mono text-amber-600';
+        healthScoreText.innerText = '64%';
+      } else {
+        banner.className += 'glow-service border-rose-300 bg-gradient-to-br from-white via-rose-50/20 to-red-50/30';
+        statusText.className = 'text-4xl sm:text-5xl font-extrabold tracking-tight text-rose-600';
+        confidencePill.className = 'text-xs font-bold px-3 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-200';
+        healthScoreText.className = 'text-2xl font-bold font-mono text-rose-600';
+        healthScoreText.innerText = '21%';
+      }
+
+      if (res.guardrail_triggered) {
+        guardrailBadge.classList.remove('hidden');
+        guardrailBadge.title = res.guardrail_reason;
+      } else {
+        guardrailBadge.classList.add('hidden');
+      }
+
+      // Update Probability Bars
+      const pNorm = (res.probabilities['Normal'] || 0) * 100;
+      const pMon = (res.probabilities['Monitor'] || 0) * 100;
+      const pServ = (res.probabilities['Service Required'] || 0) * 100;
+
+      document.getElementById('probNormal').innerText = `${pNorm.toFixed(1)}%`;
+      document.getElementById('barNormal').style.width = `${pNorm}%`;
+
+      document.getElementById('probMonitor').innerText = `${pMon.toFixed(1)}%`;
+      document.getElementById('barMonitor').style.width = `${pMon}%`;
+
+      document.getElementById('probService').innerText = `${pServ.toFixed(1)}%`;
+      document.getElementById('barService').style.width = `${pServ}%`;
+
+      // Update Top KPIs
+      document.getElementById('rejectionVal').innerText = `${res.physics_indicators.salt_rejection_pct.toFixed(1)}%`;
+      document.getElementById('tempCompRejectionVal').innerText = `${res.physics_indicators.temp_compensated_rejection_pct.toFixed(1)}%`;
+      document.getElementById('tdsInVal').innerText = parseFloat(tdsIn).toFixed(1);
+      document.getElementById('tdsOutVal').innerHTML = `${parseFloat(tdsOut).toFixed(1)} <span class="text-xs text-slate-400 font-normal">ppm</span>`;
+      document.getElementById('deltaTdsVal').innerText = `${res.physics_indicators.delta_tds_ppm.toFixed(1)} ppm`;
+      document.getElementById('flowRateVal').innerHTML = `${parseFloat(flow).toFixed(2)} <span class="text-xs text-slate-400 font-normal">L/m</span>`;
+      document.getElementById('temperatureVal').innerHTML = `${parseFloat(temp).toFixed(1)} <span class="text-xs text-slate-400 font-normal">°C</span>`;
+      
+      const flowIdx = (flow * Math.max(0, res.physics_indicators.salt_rejection_pct / 100)).toFixed(2);
+      document.getElementById('flowIndexVal').innerText = flowIdx;
+
+      // Update Flow Schematic Badges
+      document.getElementById('flowFeedTds').innerHTML = `${parseFloat(tdsIn).toFixed(0)} <span class="text-xs text-slate-400 font-normal">ppm</span>`;
+      document.getElementById('flowPermeateTds').innerHTML = `${parseFloat(tdsOut).toFixed(0)} <span class="text-xs text-slate-400 font-normal">ppm</span>`;
+      document.getElementById('flowRejectionPct').innerText = `${res.physics_indicators.salt_rejection_pct.toFixed(1)}%`;
+      document.getElementById('flowRateDispense').innerHTML = `${parseFloat(flow).toFixed(2)} <span class="text-xs text-slate-400 font-normal">L/m</span>`;
+    }
+
+    // Input Synchronization
+    function onSliderChangeSync(numInputId, value) {
+      document.getElementById(numInputId).value = value;
+      triggerPredictionFromInputs();
+    }
+
+    function onNumInputChange(sliderId, value) {
+      document.getElementById(sliderId).value = value;
+      triggerPredictionFromInputs();
+    }
+
+    function triggerPredictionFromInputs() {
+      const tdsIn = document.getElementById('sliderTdsIn').value;
+      const tdsOut = document.getElementById('sliderTdsOut').value;
+      const temp = document.getElementById('sliderTemp').value;
+      const flow = document.getElementById('sliderFlow').value;
+      requestPrediction(tdsIn, tdsOut, temp, flow);
+    }
+
+    function applyScenario(tdsIn, tdsOut, temp, flow, name) {
+      if (isStreaming) toggleLiveStream();
+      document.getElementById('sliderTdsIn').value = tdsIn;
+      document.getElementById('numTdsIn').value = tdsIn;
+      document.getElementById('sliderTdsOut').value = tdsOut;
+      document.getElementById('numTdsOut').value = tdsOut;
+      document.getElementById('sliderTemp').value = temp;
+      document.getElementById('numTemp').value = temp;
+      document.getElementById('sliderFlow').value = flow;
+      document.getElementById('numFlow').value = flow;
+      triggerPredictionFromInputs();
+    }
+
+    function resetToDefaults() {
+      applyScenario(420, 28, 25.5, 1.95, 'Fresh RO Membrane');
+    }
+
+    function onWaterSourceChange() {
+      const src = document.getElementById('waterSourceSelect').value;
+      if (src === 'municipal') {
+        applyScenario(420, 28, 25.5, 1.95, 'Municipal Tap');
+      } else if (src === 'hardwater') {
+        applyScenario(840, 52, 26.5, 1.80, 'Ground / Borewell');
+      } else {
+        applyScenario(580, 40, 27.0, 1.85, 'Tanker Water');
+      }
+    }
+
+    // Live Streaming Telemetry Simulator
+    function toggleLiveStream() {
+      isStreaming = !isStreaming;
+      const btn = document.getElementById('streamToggleBtn');
+      const icon = document.getElementById('streamIcon');
+      const text = document.getElementById('streamText');
+
+      if (isStreaming) {
+        btn.className = 'flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold shadow-xs transition-all';
+        icon.className = 'fa-solid fa-stop text-[10px] text-white';
+        text.innerText = 'Halt Telemetry';
+
+        streamInterval = setInterval(async () => {
+          try {
+            let state = "Normal";
+            const currentStatus = document.getElementById('statusText').innerText;
+            if (currentStatus === "MONITOR") state = "Monitor";
+            else if (currentStatus === "SERVICE REQUIRED") state = "Service Required";
+
+            const res = await fetch(`/api/stream-sample?state=${encodeURIComponent(state)}`);
+            const sample = await res.json();
+            
+            document.getElementById('sliderTdsIn').value = sample.tds_in;
+            document.getElementById('numTdsIn').value = sample.tds_in;
+            document.getElementById('sliderTdsOut').value = sample.tds_out;
+            document.getElementById('numTdsOut').value = sample.tds_out;
+            document.getElementById('sliderTemp').value = sample.temperature;
+            document.getElementById('numTemp').value = sample.temperature;
+            document.getElementById('sliderFlow').value = sample.flow_rate;
+            document.getElementById('numFlow').value = sample.flow_rate;
+            
+            triggerPredictionFromInputs();
+          } catch (e) {
+            console.error("Stream error:", e);
+          }
+        }, 1800);
+      } else {
+        clearInterval(streamInterval);
+        btn.className = 'flex items-center space-x-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-xs transition-all';
+        icon.className = 'fa-solid fa-play text-[10px] text-sky-400';
+        text.innerText = 'Simulate Telemetry';
+      }
+    }
+
+    // Real CSV File Upload & Processing
+    async function handleCsvFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const resp = await fetch('/api/upload-csv', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!resp.ok) {
+          const errData = await resp.json();
+          alert('Upload Error: ' + (errData.detail || 'Could not parse CSV'));
+          return;
+        }
+
+        const data = await resp.json();
+        renderUploadResults(data);
+      } catch (err) {
+        alert('Network or processing error: ' + err.message);
+      }
+    }
+
+    // Direct 1-Click Load for Bundled Benchmark Dataset
+    async function loadSampleDatasetDirectly() {
+      try {
+        const resp = await fetch('/api/load-sample-csv');
+        if (!resp.ok) throw new Error('Could not load sample dataset');
+        const data = await resp.json();
+        renderUploadResults(data);
+      } catch (err) {
+        alert('Error loading sample dataset: ' + err.message);
+      }
+    }
+
+    function renderUploadResults(data) {
+      document.getElementById('uploadResultsSection').classList.remove('hidden');
+      document.getElementById('resFilename').innerText = data.filename;
+      document.getElementById('resTotalRecords').innerText = data.total_records.toLocaleString();
+
+      document.getElementById('resNormalCount').innerText = `${data.percentages.Normal}%`;
+      document.getElementById('resNormalSub').innerText = `${data.breakdown.Normal} records`;
+
+      document.getElementById('resMonitorCount').innerText = `${data.percentages.Monitor}%`;
+      document.getElementById('resMonitorSub').innerText = `${data.breakdown.Monitor} records`;
+
+      document.getElementById('resServiceCount').innerText = `${data.percentages['Service Required']}%`;
+      document.getElementById('resServiceSub').innerText = `${data.breakdown['Service Required']} records`;
+
+      cachedUploadedRows = data.rows_preview;
+      renderTableRows(cachedUploadedRows);
+    }
+
+    function renderTableRows(rows) {
+      const tbody = document.getElementById('csvResultsTableBody');
+      tbody.innerHTML = '';
+
+      rows.forEach(row => {
+        let badgeColor = 'bg-emerald-100 text-emerald-800 border-emerald-200';
+        if (row.predicted_status === 'Monitor') badgeColor = 'bg-amber-100 text-amber-800 border-amber-200';
+        else if (row.predicted_status === 'Service Required') badgeColor = 'bg-rose-100 text-rose-800 border-rose-200';
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="py-2.5 px-3 text-slate-400 font-sans">${row.row_index}</td>
+          <td class="py-2.5 px-3 text-slate-600 font-sans">${row.timestamp}</td>
+          <td class="py-2.5 px-3 text-sky-700 font-semibold">${row.tds_in} ppm</td>
+          <td class="py-2.5 px-3 text-teal-700 font-semibold">${row.tds_out} ppm</td>
+          <td class="py-2.5 px-3 text-emerald-700 font-semibold">${row.salt_rejection}%</td>
+          <td class="py-2.5 px-3 text-amber-700 font-semibold">${row.flow_rate} L/m</td>
+          <td class="py-2.5 px-3 text-rose-700 font-semibold">${row.temperature}°C</td>
+          <td class="py-2.5 px-3 font-sans">
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold border ${badgeColor}">
+              ${row.predicted_status}
+            </span>
+          </td>
+          <td class="py-2.5 px-3 text-slate-700 font-semibold">${row.confidence}%</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterTable(category) {
+      document.querySelectorAll('#flt-all, #flt-normal, #flt-monitor, #flt-service').forEach(btn => {
+        btn.className = 'px-2.5 py-1 rounded bg-slate-100 text-slate-600 hover:bg-slate-200 font-semibold';
+      });
+
+      if (category === 'all') {
+        document.getElementById('flt-all').className = 'px-2.5 py-1 rounded bg-slate-900 text-white font-semibold';
+        renderTableRows(cachedUploadedRows);
+      } else {
+        const btnId = category === 'Normal' ? 'flt-normal' : category === 'Monitor' ? 'flt-monitor' : 'flt-service';
+        document.getElementById(btnId).className = 'px-2.5 py-1 rounded bg-slate-900 text-white font-semibold';
+        const filtered = cachedUploadedRows.filter(r => r.predicted_status === category);
+        renderTableRows(filtered);
+      }
+    }
+
+    // On Load Lifecycle
+    window.addEventListener('DOMContentLoaded', () => {
+      initCharts();
+      triggerPredictionFromInputs();
+    });
+  </script>
+</body>
+</html>

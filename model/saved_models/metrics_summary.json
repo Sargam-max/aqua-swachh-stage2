@@ -1,0 +1,69 @@
+{
+  "best_model": "Random Forest Classifier (Primary Model)",
+  "feature_columns": [
+    "tds_in",
+    "tds_out",
+    "temperature",
+    "flow_rate",
+    "salt_rejection",
+    "delta_tds",
+    "tds_out_norm_25c",
+    "temp_comp_rejection",
+    "flow_rejection_index"
+  ],
+  "classes": [
+    "Normal",
+    "Monitor",
+    "Service Required"
+  ],
+  "test_accuracy": 1.0,
+  "test_macro_f1": 1.0,
+  "confusion_matrix": [
+    [
+      165,
+      0,
+      0
+    ],
+    [
+      0,
+      75,
+      0
+    ],
+    [
+      0,
+      0,
+      60
+    ]
+  ],
+  "feature_importances": {
+    "flow_rejection_index": 0.3118557056317102,
+    "temp_comp_rejection": 0.2774052706046931,
+    "salt_rejection": 0.2192747528448485,
+    "flow_rate": 0.1247850481302309,
+    "tds_out_norm_25c": 0.03842139365378786,
+    "tds_out": 0.020973235372036193,
+    "delta_tds": 0.003483942840279995,
+    "tds_in": 0.0027024352734830604,
+    "temperature": 0.0010982156489302629
+  },
+  "comparison": {
+    "Dummy (Majority Class Baseline)": {
+      "cv_f1_mean": 0.23655913978494625,
+      "cv_f1_std": 0.0,
+      "test_accuracy": 0.55,
+      "test_f1_macro": 0.23655913978494625
+    },
+    "Logistic Regression (Linear Baseline)": {
+      "cv_f1_mean": 0.9962234461054287,
+      "cv_f1_std": 0.007553107789142421,
+      "test_accuracy": 0.9966666666666667,
+      "test_f1_macro": 0.994991374033057
+    },
+    "Random Forest Classifier (Primary Model)": {
+      "cv_f1_mean": 1.0,
+      "cv_f1_std": 0.0,
+      "test_accuracy": 1.0,
+      "test_f1_macro": 1.0
+    }
+  }
+}
