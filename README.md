@@ -11,7 +11,7 @@
 > **Predictive Filter Health Monitoring for Smart Water Purifiers**  
 > An edge-to-cloud machine learning system that diagnoses RO membrane health, detects early scaling, and enforces deterministic safety guardrails on drinking water quality.
 >
-> 🌐 **Live Public Demo:** [https://c48cae0c1101b2.lhr.life](https://c48cae0c1101b2.lhr.life)  
+> 🌐 **Live Public Demo:** [https://aqua-swachh.onrender.com/](https://aqua-swachh.onrender.com/)  
 > 📦 **GitHub Repository:** [https://github.com/Sargam-max/aqua-swachh-stage2](https://github.com/Sargam-max/aqua-swachh-stage2)
 
 ---
